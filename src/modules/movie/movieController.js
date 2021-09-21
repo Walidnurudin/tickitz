@@ -5,15 +5,19 @@ module.exports = {
   getAllMovie: async (req, res) => {
     try {
       let { page, limit } = req.query;
+      const { search } = req.query;
       page = Number(page);
       limit = Number(limit);
 
-      // TAMBAHKAN DEFAULT PAGE VALUE
-      // DEFAULT 1
-
-      const offset = page * limit - limit;
+      let offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
+
+      if (totalPage < page) {
+        offset = 0;
+        page = 1;
+      }
+
       const pageInfo = {
         page,
         totalPage,
@@ -21,7 +25,17 @@ module.exports = {
         totalData,
       };
 
-      const result = await movieModel.getAllMovie(limit, offset);
+      const result = await movieModel.getAllMovie(limit, offset, search);
+
+      if (result.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by keyword ${search} not found !`,
+          null
+        );
+      }
+
       return helperWrapper.response(
         res,
         200,
@@ -101,6 +115,12 @@ module.exports = {
         synopsis,
         updatedAt: new Date(Date.now()),
       };
+
+      Object.keys(setData).forEach((property) => {
+        if (!setData[property]) {
+          delete setData[property];
+        }
+      });
 
       const result = await movieModel.updateMovie(setData, id);
       return helperWrapper.response(res, 200, `Success update data`, result);

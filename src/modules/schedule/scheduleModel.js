@@ -1,9 +1,19 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getAllSchedule: () =>
+  getAllSchedule: (limit, offset, search) =>
     new Promise((resolve, reject) => {
-      connection.query("SELECT * FROM schedule", (err, result) => {
+      let query;
+      if (search && limit) {
+        query = `SELECT * FROM schedule WHERE movieId LIKE '%${search}%' OR location LIKE '%${search}%' ORDER BY price ASC LIMIT ? OFFSET ?`;
+      } else if (limit || limit === 0) {
+        query = "SELECT * FROM schedule ORDER BY price ASC LIMIT ? OFFSET ?";
+      } else if (search) {
+        query = `SELECT * FROM schedule WHERE movieId LIKE '%${search}%' OR location LIKE '%${search}%' ORDER BY price ASC`;
+      } else {
+        query = "SELECT * FROM schedule ORDER BY price ASC";
+      }
+      connection.query(query, [limit, offset], (err, result) => {
         if (!err) {
           resolve(result);
         } else {

@@ -5,8 +5,45 @@ const helperWrapper = require("../../helper/wrapper");
 module.exports = {
   getAllSchedule: async (req, res) => {
     try {
-      const result = await scheduleModel.getAllSchedule();
-      return helperWrapper.response(res, 200, "Success get data", result);
+      let { page, limit } = req.query;
+      const { search } = req.query;
+      page = Number(page);
+      limit = Number(limit);
+
+      let offset = page * limit - limit;
+      const totalData = await scheduleModel.getCountSchedule();
+      const totalPage = Math.ceil(totalData / limit);
+
+      if (totalPage < page) {
+        offset = 0;
+        page = 1;
+      }
+
+      const pageInfo = {
+        page,
+        totalPage,
+        limit,
+        totalData,
+      };
+
+      const result = await scheduleModel.getAllSchedule(limit, offset, search);
+
+      if (result.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by keyword ${search} not found !`,
+          null
+        );
+      }
+
+      return helperWrapper.response(
+        res,
+        200,
+        "Success get data",
+        result,
+        pageInfo
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -16,6 +53,9 @@ module.exports = {
       );
     }
   },
+
+  // 1. Search (by movieid, location), SELECT * FROM `schedule` WHERE premiere LIKE '%bu%';
+  // 2. Sort (by price), release date, SELECT * FROM mahasiswa ORDER BY nik;
 
   getScheduleById: async (req, res) => {
     try {
