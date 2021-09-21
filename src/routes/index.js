@@ -1,14 +1,10 @@
 const express = require("express");
 
 const Router = express.Router();
-const helloRoutes = require("../modules/hello/helloRoutes");
 const movieRoutes = require("../modules/movie/movieRoutes");
+const scheduleRoutes = require("../modules/schedule/scheduleRoutes");
 
-// Router.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
-
-Router.use("/hello", helloRoutes);
 Router.use("/movie", movieRoutes);
+Router.use("/schedule", scheduleRoutes);
 
 module.exports = Router;

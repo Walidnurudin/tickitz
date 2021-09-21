@@ -74,7 +74,7 @@ module.exports = {
 
   deleteMovie: (id) =>
     new Promise((resolve, reject) => {
-      connection.query("DELETE FROM movie WHERE id = ?", id, (err, result) => {
+      connection.query("DELETE FROM movie WHERE id = ?", id, (err) => {
         if (!err) {
           resolve(id);
         } else {
