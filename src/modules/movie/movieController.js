@@ -4,10 +4,11 @@ const helperWrapper = require("../../helper/wrapper");
 module.exports = {
   getAllMovie: async (req, res) => {
     try {
-      let { page, limit } = req.query;
-      const { search } = req.query;
-      page = Number(page);
-      limit = Number(limit);
+      let { page, limit, search, sort } = req.query;
+      page = Number(page) || 1;
+      limit = Number(limit) || 10;
+      sort = sort || "name ASC";
+      search = search || "";
 
       let offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
@@ -25,7 +26,7 @@ module.exports = {
         totalData,
       };
 
-      const result = await movieModel.getAllMovie(limit, offset, search);
+      const result = await movieModel.getAllMovie(limit, offset, search, sort);
 
       if (result.length < 1) {
         return helperWrapper.response(
@@ -78,8 +79,24 @@ module.exports = {
 
   postMovie: async (req, res) => {
     try {
-      const { name, category, releaseDate, synopsis } = req.body;
-      const setData = { name, category, releaseDate, synopsis };
+      const {
+        name,
+        category,
+        releaseDate,
+        cast,
+        director,
+        duration,
+        synopsis,
+      } = req.body;
+      const setData = {
+        name,
+        category,
+        releaseDate,
+        cast,
+        director,
+        duration,
+        synopsis,
+      };
 
       const result = await movieModel.postMovie(setData);
 
@@ -107,11 +124,22 @@ module.exports = {
         );
       }
 
-      const { name, category, releaseDate, synopsis } = req.body;
+      const {
+        name,
+        category,
+        releaseDate,
+        cast,
+        director,
+        duration,
+        synopsis,
+      } = req.body;
       const setData = {
         name,
         category,
         releaseDate,
+        cast,
+        director,
+        duration,
         synopsis,
         updatedAt: new Date(Date.now()),
       };

@@ -5,10 +5,12 @@ const helperWrapper = require("../../helper/wrapper");
 module.exports = {
   getAllSchedule: async (req, res) => {
     try {
-      let { page, limit } = req.query;
-      const { search } = req.query;
-      page = Number(page);
-      limit = Number(limit);
+      let { page, limit, searchLocation, searchMovieId, sort } = req.query;
+      page = Number(page) || 1;
+      limit = Number(limit) || 10;
+      searchLocation = searchLocation || "";
+      searchMovieId = searchMovieId || "";
+      sort = sort || "price ASC";
 
       let offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule();
@@ -26,15 +28,16 @@ module.exports = {
         totalData,
       };
 
-      const result = await scheduleModel.getAllSchedule(limit, offset, search);
+      const result = await scheduleModel.getAllSchedule(
+        limit,
+        offset,
+        searchLocation,
+        searchMovieId,
+        sort
+      );
 
       if (result.length < 1) {
-        return helperWrapper.response(
-          res,
-          404,
-          `Data by keyword ${search} not found !`,
-          null
-        );
+        return helperWrapper.response(res, 404, `Data not found !`, null);
       }
 
       return helperWrapper.response(
@@ -53,9 +56,6 @@ module.exports = {
       );
     }
   },
-
-  // 1. Search (by movieid, location), SELECT * FROM `schedule` WHERE premiere LIKE '%bu%';
-  // 2. Sort (by price), release date, SELECT * FROM mahasiswa ORDER BY nik;
 
   getScheduleById: async (req, res) => {
     try {
@@ -182,6 +182,12 @@ module.exports = {
           null
         );
       }
+
+      Object.keys(setData).forEach((property) => {
+        if (!setData[property]) {
+          delete setData[property];
+        }
+      });
 
       const result = await scheduleModel.updateSchedule(setData, id);
       return helperWrapper.response(res, 200, `Success update data`, result);
