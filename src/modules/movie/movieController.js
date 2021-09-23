@@ -29,12 +29,7 @@ module.exports = {
       const result = await movieModel.getAllMovie(limit, offset, search, sort);
 
       if (result.length < 1) {
-        return helperWrapper.response(
-          res,
-          404,
-          `Data by keyword ${search} not found !`,
-          null
-        );
+        return helperWrapper.response(res, 404, `Data not found !`, null);
       }
 
       return helperWrapper.response(
