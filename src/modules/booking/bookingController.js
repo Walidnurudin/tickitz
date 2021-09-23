@@ -1,8 +1,71 @@
 const bookingModel = require("./bookingModel");
 const scheduleModel = require("../schedule/scheduleModel");
+const seatModel = require("../seat/seatModel");
 const helperWrapper = require("../../helper/wrapper");
 
 module.exports = {
+  getBookingById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const booking = await bookingModel.getBookingById(id);
+      if (booking.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by id ${id} not found !`,
+          null
+        );
+      }
+      const seat = await seatModel.getSeatByBookingId(booking[0].id);
+
+      const result = {
+        booking,
+        seat,
+      };
+
+      return helperWrapper.response(res, 200, `Success get data by id`, result);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  getBookingByUserId: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const booking = await bookingModel.getBookingByUserId(id);
+      if (booking.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by id ${id} not found !`,
+          null
+        );
+      }
+      const seat = await seatModel.getSeatByBookingId(booking[0].id);
+
+      const result = {
+        booking,
+        seat,
+      };
+
+      return helperWrapper.response(res, 200, `Success get data by id`, result);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
   postBooking: async (req, res) => {
     try {
       const {
