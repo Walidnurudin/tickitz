@@ -4,9 +4,7 @@ module.exports = {
   getBookingById: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        // "SELECT * FROM booking WHERE id = ?",
-        // "SELECT * FROM booking JOIN seatBooking ON booking.id = seatBooking.bookingId",
-        "SELECT * FROM booking, seatBooking WHERE booking.id = ?",
+        "SELECT * FROM booking AS b JOIN seatBooking AS sb ON b.id = sb.bookingId WHERE b.id = ?",
         id,
         (err, result) => {
           if (!err) {
@@ -21,9 +19,7 @@ module.exports = {
   getBookingByUserId: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        // "SELECT * FROM booking WHERE userId = ?",
-        // "SELECT * FROM booking JOIN seatBooking ON booking.userId = seatBooking.id",
-        "SELECT * FROM booking, seatBooking WHERE booking.userId = ?",
+        "SELECT * FROM booking AS b JOIN seatBooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
         id,
         (err, result) => {
           if (!err) {

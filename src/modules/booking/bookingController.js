@@ -1,6 +1,5 @@
 const bookingModel = require("./bookingModel");
 const scheduleModel = require("../schedule/scheduleModel");
-// const seatModel = require("../seat/seatModel");
 const helperWrapper = require("../../helper/wrapper");
 
 module.exports = {
@@ -12,12 +11,6 @@ module.exports = {
       if (booking.length < 1) {
         return helperWrapper.response(res, 404, `Data by id not found !`, null);
       }
-      // const seat = await seatModel.getSeatByBookingId(booking[0].id);
-
-      // const result = {
-      //   booking,
-      //   seat,
-      // };
 
       return helperWrapper.response(
         res,
@@ -43,12 +36,6 @@ module.exports = {
       if (booking.length < 1) {
         return helperWrapper.response(res, 404, `Data not found !`, null);
       }
-      // const seat = await seatModel.getSeatByBookingId(booking[0].id);
-
-      // const result = {
-      //   booking,
-      //   seat,
-      // };
 
       return helperWrapper.response(
         res,
