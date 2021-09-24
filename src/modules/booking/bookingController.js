@@ -1,6 +1,6 @@
 const bookingModel = require("./bookingModel");
 const scheduleModel = require("../schedule/scheduleModel");
-const seatModel = require("../seat/seatModel");
+// const seatModel = require("../seat/seatModel");
 const helperWrapper = require("../../helper/wrapper");
 
 module.exports = {
@@ -10,21 +10,21 @@ module.exports = {
 
       const booking = await bookingModel.getBookingById(id);
       if (booking.length < 1) {
-        return helperWrapper.response(
-          res,
-          404,
-          `Data by id ${id} not found !`,
-          null
-        );
+        return helperWrapper.response(res, 404, `Data by id not found !`, null);
       }
-      const seat = await seatModel.getSeatByBookingId(booking[0].id);
+      // const seat = await seatModel.getSeatByBookingId(booking[0].id);
 
-      const result = {
-        booking,
-        seat,
-      };
+      // const result = {
+      //   booking,
+      //   seat,
+      // };
 
-      return helperWrapper.response(res, 200, `Success get data by id`, result);
+      return helperWrapper.response(
+        res,
+        200,
+        `Success get data by id`,
+        booking
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -41,21 +41,21 @@ module.exports = {
 
       const booking = await bookingModel.getBookingByUserId(id);
       if (booking.length < 1) {
-        return helperWrapper.response(
-          res,
-          404,
-          `Data by id ${id} not found !`,
-          null
-        );
+        return helperWrapper.response(res, 404, `Data not found !`, null);
       }
-      const seat = await seatModel.getSeatByBookingId(booking[0].id);
+      // const seat = await seatModel.getSeatByBookingId(booking[0].id);
 
-      const result = {
-        booking,
-        seat,
-      };
+      // const result = {
+      //   booking,
+      //   seat,
+      // };
 
-      return helperWrapper.response(res, 200, `Success get data by id`, result);
+      return helperWrapper.response(
+        res,
+        200,
+        `Success get data by id`,
+        booking
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -72,13 +72,11 @@ module.exports = {
         userId,
         scheduleId,
         // movieId,
-        // dateBooking,
-        // timeBooking,
+        dateBooking,
+        timeBooking,
         paymentMethod,
         statusPayment,
         seat,
-        dateSchedule,
-        timeSchedule,
       } = req.body;
 
       const schedule = await scheduleModel.getScheduleById(scheduleId);
@@ -97,8 +95,8 @@ module.exports = {
         movieId: schedule[0].movieId,
         totalTicket: seat.length,
         totalPayment: seat.length * schedule[0].price,
-        dateBooking: new Date(Date.now()),
-        timeBooking: new Date(Date.now()),
+        dateBooking,
+        timeBooking,
         paymentMethod,
         statusPayment,
       };
@@ -109,8 +107,8 @@ module.exports = {
         bookingId: resultBooking.insertId,
         scheduleId,
         movieId: schedule[0].movieId,
-        dateSchedule,
-        timeSchedule,
+        dateBooking,
+        timeBooking,
       };
 
       seat.map(async (item) => {

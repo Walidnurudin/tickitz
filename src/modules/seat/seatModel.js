@@ -1,71 +1,10 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getSeatByBookingId: (id) =>
+  getSeatBooking: (scheduleId, movieId, dateBooking, timeBooking) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT * FROM seatBooking WHERE bookingId = ?",
-        id,
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else {
-            reject(new Error(`SQL : ${err.sqlMessage}`));
-          }
-        }
-      );
-    }),
-
-  getSeatByScheduleId: (id) =>
-    new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM seatBooking WHERE scheduleId = ?",
-        id,
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else {
-            reject(new Error(`SQL : ${err.sqlMessage}`));
-          }
-        }
-      );
-    }),
-
-  getSeatByMovieId: (id) =>
-    new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM seatBooking WHERE movieId = ?",
-        id,
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else {
-            reject(new Error(`SQL : ${err.sqlMessage}`));
-          }
-        }
-      );
-    }),
-
-  getSeatByDateSchedule: (date) =>
-    new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM seatBooking WHERE dateSchedule = ?",
-        date,
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else {
-            reject(new Error(`SQL : ${err.sqlMessage}`));
-          }
-        }
-      );
-    }),
-
-  getSeatByTimeSchedule: (time) =>
-    new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM seatBooking WHERE timeSchedule = ?",
-        time,
+        `SELECT * FROM seatBooking WHERE scheduleId LIKE '%${scheduleId}%' AND movieId LIKE '%${movieId}%' AND dateBooking LIKE '%${dateBooking}%' AND timeBooking LIKE '%${timeBooking}%'`,
         (err, result) => {
           if (!err) {
             resolve(result);
