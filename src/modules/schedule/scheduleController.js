@@ -36,6 +36,15 @@ module.exports = {
         sort
       );
 
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          time: item.time.split(","),
+        };
+
+        return data;
+      });
+
       if (result.length < 1) {
         return helperWrapper.response(res, 404, `Data not found !`, null);
       }
@@ -44,7 +53,7 @@ module.exports = {
         res,
         200,
         "Success get data",
-        result,
+        newResult,
         pageInfo
       );
     } catch (error) {
@@ -69,7 +78,22 @@ module.exports = {
           null
         );
       }
-      return helperWrapper.response(res, 200, `Success get data by id`, result);
+
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          time: item.time.split(","),
+        };
+
+        return data;
+      });
+
+      return helperWrapper.response(
+        res,
+        200,
+        `Success get data by id`,
+        newResult
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -82,21 +106,31 @@ module.exports = {
 
   getScheduleByMovieId: async (req, res) => {
     try {
-      const { movieId } = req.params;
-      const result = await scheduleModel.getScheduleByMovieId(movieId);
+      const { id } = req.params;
+      const result = await scheduleModel.getScheduleByMovieId(id);
       if (result.length < 1) {
         return helperWrapper.response(
           res,
           404,
-          `Data by movieId ${movieId} not found !`,
+          `Data by movieId ${id} not found !`,
           null
         );
       }
+
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          time: item.time.split(","),
+        };
+
+        return data;
+      });
+
       return helperWrapper.response(
         res,
         200,
         `Success get data by movieId`,
-        result
+        newResult
       );
     } catch (error) {
       return helperWrapper.response(

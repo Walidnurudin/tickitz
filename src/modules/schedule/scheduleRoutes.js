@@ -6,7 +6,7 @@ const scheduleController = require("./scheduleController");
 
 Router.get("/", scheduleController.getAllSchedule);
 Router.get("/:id", scheduleController.getScheduleById);
-Router.get("/movie/:movieId", scheduleController.getScheduleByMovieId);
+Router.get("/movie-id/:id", scheduleController.getScheduleByMovieId);
 Router.post("/", scheduleController.postSchedule);
 Router.patch("/:id", scheduleController.updateSchedule);
 Router.delete("/:id", scheduleController.deleteSchedule);
