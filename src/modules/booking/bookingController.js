@@ -39,8 +39,14 @@ module.exports = {
       const { id } = req.params;
 
       const booking = await bookingModel.getBookingByUserId(id);
+
       if (booking.length < 1) {
-        return helperWrapper.response(res, 404, `Data not found !`, null);
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by id ${id} not found !`,
+          null
+        );
       }
 
       return helperWrapper.response(
@@ -82,6 +88,7 @@ module.exports = {
         );
       }
 
+      // [1]
       const setDataBooking = {
         userId,
         scheduleId,
@@ -96,6 +103,7 @@ module.exports = {
 
       const resultBooking = await bookingModel.postBooking(setDataBooking);
 
+      // [2]
       const setDataSeatBooking = {
         bookingId: resultBooking.insertId,
         scheduleId,
@@ -112,12 +120,17 @@ module.exports = {
       });
 
       const result = {
-        ...setDataBooking,
-        ...setDataSeatBooking,
+        userId,
+        scheduleId,
+        movieId: schedule[0].movieId,
+        dateBooking,
+        timeBooking,
+        paymentMethod,
+        statusPayment,
         seat,
       };
 
-      return helperWrapper.response(res, 200, "Success get data", result);
+      return helperWrapper.response(res, 200, "Success create data", result);
     } catch (error) {
       return helperWrapper.response(
         res,

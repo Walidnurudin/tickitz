@@ -16,9 +16,11 @@ module.exports = {
         dateBooking,
         timeBooking
       );
+
       if (result.length < 1) {
         return helperWrapper.response(res, 404, `Data not found !`, null);
       }
+
       return helperWrapper.response(res, 200, `Success get data by id`, result);
     } catch (error) {
       return helperWrapper.response(

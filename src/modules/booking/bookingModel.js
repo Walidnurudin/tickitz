@@ -19,7 +19,7 @@ module.exports = {
   getBookingByUserId: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT * FROM booking AS b JOIN seatBooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
+        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, sb.seat FROM booking AS b JOIN seatBooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
         id,
         (err, result) => {
           if (!err) {
