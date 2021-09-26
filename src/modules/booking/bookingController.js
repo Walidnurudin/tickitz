@@ -49,12 +49,23 @@ module.exports = {
         );
       }
 
-      return helperWrapper.response(
-        res,
-        200,
-        `Success get data by id`,
-        booking
-      );
+      const output = [];
+
+      booking.forEach((item) => {
+        const existing = output.filter((v) => v.scheduleId === item.scheduleId);
+
+        if (existing.length) {
+          const existingIndex = output.indexOf(existing[0]);
+          output[existingIndex].seat = output[existingIndex].seat.concat(
+            item.seat
+          );
+        } else {
+          if (typeof item.seat === "string") item.seat = [item.seat];
+          output.push(item);
+        }
+      });
+
+      return helperWrapper.response(res, 200, `Success get data by id`, output);
     } catch (error) {
       return helperWrapper.response(
         res,
