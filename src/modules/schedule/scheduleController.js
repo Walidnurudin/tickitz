@@ -13,7 +13,10 @@ module.exports = {
       sort = sort || "price ASC";
 
       let offset = page * limit - limit;
-      const totalData = await scheduleModel.getCountSchedule();
+      const totalData = await scheduleModel.getCountSchedule(
+        searchLocation,
+        searchMovieId
+      );
       const totalPage = Math.ceil(totalData / limit);
 
       if (totalPage < page) {

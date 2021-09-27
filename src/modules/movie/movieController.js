@@ -11,7 +11,7 @@ module.exports = {
       search = search || "";
 
       let offset = page * limit - limit;
-      const totalData = await movieModel.getCountMovie();
+      const totalData = await movieModel.getCountMovie(search);
       const totalPage = Math.ceil(totalData / limit);
 
       if (totalPage < page) {

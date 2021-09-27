@@ -60,6 +60,7 @@ module.exports = {
             item.seat
           );
         } else {
+          // eslint-disable-next-line no-param-reassign
           if (typeof item.seat === "string") item.seat = [item.seat];
           output.push(item);
         }

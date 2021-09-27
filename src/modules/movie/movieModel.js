@@ -31,15 +31,18 @@ module.exports = {
       );
     }),
 
-  getCountMovie: () =>
+  getCountMovie: (search) =>
     new Promise((resolve, reject) => {
-      connection.query("SELECT COUNT(*) AS total FROM movie", (err, result) => {
-        if (!err) {
-          resolve(result[0].total);
-        } else {
-          reject(new Error(`SQL : ${err.sqlMessage}`));
+      connection.query(
+        `SELECT COUNT(*) AS total FROM movie WHERE name LIKE '%${search}%'`,
+        (err, result) => {
+          if (!err) {
+            resolve(result[0].total);
+          } else {
+            reject(new Error(`SQL : ${err.sqlMessage}`));
+          }
         }
-      });
+      );
     }),
 
   postMovie: (data) =>
