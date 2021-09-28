@@ -50,10 +50,8 @@ module.exports = {
         return helperWrapper.response(res, 404, `Email not registed`, null);
       }
 
-      // COMPARE PASSWORD
+      // COMPARE PASSWORD return boolean
       const isMatch = await bcrypt.compare(password, checkUser[0].password);
-      console.log(isMatch);
-      console.log(checkUser);
 
       if (!isMatch) {
         return helperWrapper.response(res, 404, `Wrong password`, null);
