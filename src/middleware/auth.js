@@ -31,10 +31,10 @@ module.exports = {
 
   isAdmin: (req, res, next) => {
     // CHECK ROLE admin | user
-    // const {role} = req.decodeToken.role;
-    // if (role !== "ADMIN") {
-    //   return helperWrapper.response(res, 400, err.message);
-    // }
+    const { role } = req.decodeToken;
+    if (role !== "ADMIN") {
+      return helperWrapper.response(res, 400, `Role user must be admin`, null);
+    }
     next();
   },
 };

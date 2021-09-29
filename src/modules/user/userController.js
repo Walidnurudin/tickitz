@@ -1,23 +1,43 @@
 const bcrypt = require("bcrypt");
 const modelUser = require("./userModel");
 const helperWrapper = require("../../helper/wrapper");
+const deleteFile = require("../../helper/uploads/deleteFile");
 
 module.exports = {
-  updateProfile: async (req, res) => {
+  getUserById: async (req, res) => {
     try {
       const { id } = req.params;
-      const { firstName, lastName, email, phoneNumber } = req.body;
 
-      const checkUser = await modelUser.getUserById(id);
-
-      if (checkUser.length < 1) {
+      const result = await modelUser.getUserById(id);
+      if (result.length < 1) {
         return helperWrapper.response(
           res,
           404,
-          `User by id ${id} not found`,
+          `Get data user by id ${id} not found`,
           null
         );
       }
+
+      return helperWrapper.response(
+        res,
+        200,
+        `Success get data user by id`,
+        result
+      );
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  updateProfile: async (req, res) => {
+    try {
+      const user = req.decodeToken;
+      const { firstName, lastName, email, phoneNumber } = req.body;
 
       const setData = {
         firstName,
@@ -26,7 +46,7 @@ module.exports = {
         phoneNumber,
       };
 
-      const result = await modelUser.updateProfile(setData, id);
+      const result = await modelUser.updateProfile(setData, user.id);
 
       return helperWrapper.response(res, 200, `Success update profile`, result);
     } catch (error) {
@@ -39,21 +59,39 @@ module.exports = {
     }
   },
 
+  updateImage: async (req, res) => {
+    try {
+      const user = req.decodeToken;
+
+      if (user.image) {
+        deleteFile(`public/uploads/user/${user.image}`);
+      }
+
+      const setData = {
+        image: req.file.filename,
+      };
+
+      const result = await modelUser.updateProfile(setData, user.id);
+      return helperWrapper.response(
+        res,
+        200,
+        "Success update image user",
+        result
+      );
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
   updatePassword: async (req, res) => {
     try {
-      const { id } = req.params;
+      const user = req.decodeToken;
       const { newPassword, confirmPassword } = req.body;
-
-      const checkUser = await modelUser.getUserById(id);
-
-      if (checkUser.length < 1) {
-        return helperWrapper.response(
-          res,
-          404,
-          `User by id ${id} not found`,
-          null
-        );
-      }
 
       if (newPassword !== confirmPassword) {
         return helperWrapper.response(
@@ -69,7 +107,7 @@ module.exports = {
 
       const setData = { password: passwordHash };
 
-      const result = await modelUser.updateProfile(setData, id);
+      const result = await modelUser.updateProfile(setData, user.id);
 
       return helperWrapper.response(res, 200, `Success update password`, {
         id: result.id,

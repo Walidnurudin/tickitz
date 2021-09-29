@@ -8,7 +8,7 @@ const redis = require("../../config/redis");
 module.exports = {
   register: async (req, res) => {
     try {
-      const { firstName, lastName, email, password } = req.body;
+      const { firstName, lastName, email, role, password } = req.body;
       // PROSES PENGECEKAN EMAIL SUDAH PERNAH TERDAFTAR ATAU BELUM DI DATABASE
       const checkUser = await modelAuth.getUserByEmail(email);
 
@@ -25,6 +25,7 @@ module.exports = {
         firstName,
         lastName,
         email,
+        role: role || "USER",
         password: passwordHash,
       };
 

@@ -5,7 +5,9 @@ module.exports = {
     new Promise((resolve, reject) => {
       connection.query("SELECT * FROM user WHERE id = ?", id, (err, result) => {
         if (!err) {
-          resolve(result);
+          const newResult = result;
+          delete newResult[0].password;
+          resolve(newResult);
         } else {
           reject(new Error(`SQL : ${err.sqlMessage}`));
         }
