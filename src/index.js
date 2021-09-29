@@ -18,6 +18,7 @@ app.use(helmet());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static("public")); // example read image = localhost:3001/uploads/movie/filename
 
 app.use("/", routerNavigation);
 app.use("/*", (req, res) => {

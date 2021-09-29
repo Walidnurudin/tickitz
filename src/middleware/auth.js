@@ -35,5 +35,6 @@ module.exports = {
     // if (role !== "ADMIN") {
     //   return helperWrapper.response(res, 400, err.message);
     // }
+    next();
   },
 };

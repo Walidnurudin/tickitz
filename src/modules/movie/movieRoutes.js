@@ -5,6 +5,7 @@ const Router = express.Router();
 const movieController = require("./movieController");
 const middlewateAuth = require("../../middleware/auth");
 const middlewareRedis = require("../../middleware/redis");
+const middlewareUpload = require("../../middleware/uploadMovie");
 
 Router.get("/", middlewareRedis.getMovieRedis, movieController.getAllMovie);
 Router.get(
@@ -18,6 +19,7 @@ Router.post(
   middlewateAuth.authentication,
   middlewateAuth.isAdmin,
   middlewareRedis.clearMovieRedis,
+  middlewareUpload,
   movieController.postMovie
 );
 Router.patch(

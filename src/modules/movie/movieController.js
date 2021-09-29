@@ -1,6 +1,7 @@
 const movieModel = require("./movieModel");
 const helperWrapper = require("../../helper/wrapper");
 const redis = require("../../config/redis");
+const deleteFile = require("../../helper/uploads/deleteFile");
 
 module.exports = {
   getAllMovie: async (req, res) => {
@@ -94,6 +95,7 @@ module.exports = {
         duration,
         synopsis,
       } = req.body;
+
       const setData = {
         name,
         category,
@@ -102,6 +104,7 @@ module.exports = {
         director,
         duration,
         synopsis,
+        image: req.file ? req.file.filename : null,
       };
 
       const result = await movieModel.postMovie(setData);
@@ -180,6 +183,8 @@ module.exports = {
           null
         );
       }
+
+      deleteFile(`public/uploads/movie/${checkId[0].image}`);
 
       const result = await movieModel.deleteMovie(id);
       return helperWrapper.response(res, 200, "Success delete data", result);
