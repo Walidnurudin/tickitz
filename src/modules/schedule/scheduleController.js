@@ -1,6 +1,7 @@
 const scheduleModel = require("./scheduleModel");
 const movieModel = require("../movie/movieModel");
 const helperWrapper = require("../../helper/wrapper");
+const redis = require("../../config/redis");
 
 module.exports = {
   getAllSchedule: async (req, res) => {
@@ -52,6 +53,12 @@ module.exports = {
         return helperWrapper.response(res, 404, `Data not found !`, null);
       }
 
+      redis.setex(
+        `getSchedule:${JSON.stringify(req.query)}`,
+        3600,
+        JSON.stringify({ result, pageInfo })
+      );
+
       return helperWrapper.response(
         res,
         200,
@@ -90,6 +97,8 @@ module.exports = {
 
         return data;
       });
+
+      redis.setex(`getSchedule:${id}`, 3600, JSON.stringify(newResult));
 
       return helperWrapper.response(
         res,

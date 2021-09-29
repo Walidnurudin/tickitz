@@ -7,7 +7,12 @@ const middlewateAuth = require("../../middleware/auth");
 const middlewareRedis = require("../../middleware/redis");
 const middlewareUpload = require("../../middleware/uploadMovie");
 
-Router.get("/", middlewareRedis.getMovieRedis, movieController.getAllMovie);
+Router.get(
+  "/",
+  middlewateAuth.authentication,
+  middlewareRedis.getMovieRedis,
+  movieController.getAllMovie
+);
 Router.get(
   "/:id",
   middlewateAuth.authentication,
@@ -24,11 +29,15 @@ Router.post(
 );
 Router.patch(
   "/:id",
+  middlewateAuth.authentication,
+  middlewateAuth.isAdmin,
   middlewareRedis.clearMovieRedis,
   movieController.updateMovie
 );
 Router.delete(
   "/:id",
+  middlewateAuth.authentication,
+  middlewateAuth.isAdmin,
   middlewareRedis.clearMovieRedis,
   movieController.deleteMovie
 );

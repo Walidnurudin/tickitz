@@ -142,6 +142,7 @@ module.exports = {
         duration,
         synopsis,
       } = req.body;
+
       const setData = {
         name,
         category,
@@ -150,6 +151,7 @@ module.exports = {
         director,
         duration,
         synopsis,
+        image: req.file ? req.file.filename : null,
         updatedAt: new Date(Date.now()),
       };
 
