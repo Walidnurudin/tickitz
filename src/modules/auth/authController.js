@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const transporter = require("../../config/nodemailer");
 const helperWrapper = require("../../helper/wrapper");
 const modelAuth = require("./authModel");
 const redis = require("../../config/redis");
@@ -31,6 +32,18 @@ module.exports = {
 
       const result = await modelAuth.register(setData);
 
+      const mailOptions = {
+        from: "walidnurudin47@gmail.com",
+        to: result.email,
+        subject: "Tickitz application",
+        html: `<h1>Activate email <a href='http://localhost:3001/auth/activate/${result.id}'>here</a></h1>`,
+      };
+
+      transporter.sendMail(mailOptions, (err) => {
+        if (err) throw err;
+        // console.log(`Email sent: ${info.response}`);
+      });
+
       return helperWrapper.response(res, 200, `Success register user`, result);
     } catch (error) {
       return helperWrapper.response(
@@ -58,6 +71,16 @@ module.exports = {
         return helperWrapper.response(res, 404, `Wrong password`, null);
       }
 
+      // Check status user
+      if (checkUser[0].status !== "Active") {
+        return helperWrapper.response(
+          res,
+          400,
+          `Please activate email first`,
+          null
+        );
+      }
+
       // MEMBUAT TOKEN MENGGUNAKAN JWT (data yang mau diubah, key/kata kunci, expaired/lama token bisa digunakan)
       const payload = checkUser[0];
       delete payload.password;
@@ -82,10 +105,9 @@ module.exports = {
   activate: async (req, res) => {
     try {
       const { id } = req.params;
-      const user = await modelAuth.activate(id);
-      if (!user) {
-        // respon user tidak ada
-      }
+
+      await modelAuth.activate("Active", id);
+      return helperWrapper.response(res, 200, "Success activate email");
     } catch (error) {
       return helperWrapper.response(
         res,

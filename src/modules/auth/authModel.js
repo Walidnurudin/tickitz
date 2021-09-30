@@ -17,6 +17,21 @@ module.exports = {
       });
     }),
 
+  activate: (data, id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE user SET status = ? WHERE id = ?",
+        [data, id],
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(new Error(`SQL : ${err.sqlMessage}`));
+          }
+        }
+      );
+    }),
+
   getUserByEmail: (email) =>
     new Promise((resolve, reject) => {
       connection.query(
