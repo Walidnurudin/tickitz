@@ -54,7 +54,7 @@ module.exports = {
   },
 
   // SCHEDULE
-  getAllScheduleRedis: (req, res, next) => {
+  getScheduleRedis: (req, res, next) => {
     redis.get(`getSchedule:${JSON.stringify(req.query)}`, (err, result) => {
       if (!err && result !== null) {
         console.log("Data ada didalam redis");
@@ -75,6 +75,19 @@ module.exports = {
   getScheduleByIdRedis: (req, res, next) => {
     const { id } = req.params;
     redis.get(`getSchedule:${id}`, (err, result) => {
+      if (!err && result !== null) {
+        console.log("Data ada didalam redis");
+        const newResult = JSON.parse(result);
+        return helperWrapper.response(res, 200, "Success get data", newResult);
+      }
+      console.log("Data tidak ada didalam redis");
+      next();
+    });
+  },
+
+  getScheduleByMovieIdRedis: (req, res, next) => {
+    const { id } = req.params;
+    redis.get(`getSchedule:movieId${id}`, (err, result) => {
       if (!err && result !== null) {
         console.log("Data ada didalam redis");
         const newResult = JSON.parse(result);

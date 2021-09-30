@@ -6,7 +6,7 @@ const deleteFile = require("../../helper/uploads/deleteFile");
 module.exports = {
   getUserById: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.decodeToken;
 
       const result = await modelUser.getUserById(id);
       if (result.length < 1) {

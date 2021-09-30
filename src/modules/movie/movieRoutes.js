@@ -32,6 +32,7 @@ Router.patch(
   middlewateAuth.authentication,
   middlewateAuth.isAdmin,
   middlewareRedis.clearMovieRedis,
+  middlewareUpload,
   movieController.updateMovie
 );
 Router.delete(

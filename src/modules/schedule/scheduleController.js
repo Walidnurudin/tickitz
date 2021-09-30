@@ -138,6 +138,8 @@ module.exports = {
         return data;
       });
 
+      redis.setex(`getSchedule:movieId${id}`, 3600, JSON.stringify(newResult));
+
       return helperWrapper.response(
         res,
         200,

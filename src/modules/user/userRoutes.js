@@ -6,12 +6,7 @@ const userController = require("./userController");
 const middlewareAuth = require("../../middleware/auth");
 const middlewareUpload = require("../../middleware/uploadUser");
 
-Router.get(
-  "/:id",
-  middlewareAuth.authentication,
-  middlewareAuth.isAdmin,
-  userController.getUserById
-);
+Router.get("/", middlewareAuth.authentication, userController.getUserById);
 Router.patch("/", middlewareAuth.authentication, userController.updateProfile);
 Router.patch(
   "/update-image",
@@ -20,7 +15,7 @@ Router.patch(
   userController.updateImage
 );
 Router.patch(
-  "/update-password/",
+  "/update-password",
   middlewareAuth.authentication,
   userController.updatePassword
 );

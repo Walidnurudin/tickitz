@@ -58,10 +58,6 @@ module.exports = {
         return helperWrapper.response(res, 404, `Wrong password`, null);
       }
 
-      // if (password !== checkUser[0].password) {
-      //   return helperWrapper.response(res, 404, `Wrong password`, null);
-      // }
-
       // MEMBUAT TOKEN MENGGUNAKAN JWT (data yang mau diubah, key/kata kunci, expaired/lama token bisa digunakan)
       const payload = checkUser[0];
       delete payload.password;
@@ -73,6 +69,23 @@ module.exports = {
         id: payload.id,
         token,
       });
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad Request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  activate: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const user = await modelAuth.activate(id);
+      if (!user) {
+        // respon user tidak ada
+      }
     } catch (error) {
       return helperWrapper.response(
         res,
