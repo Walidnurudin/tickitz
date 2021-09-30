@@ -36,8 +36,18 @@ module.exports = {
 
   updateProfile: async (req, res) => {
     try {
-      const user = req.decodeToken;
+      const { id } = req.decodeToken;
       const { firstName, lastName, email, phoneNumber } = req.body;
+
+      const user = await modelUser.getUserById(id);
+      if (user.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Get data user by id ${id} not found`,
+          null
+        );
+      }
 
       const setData = {
         firstName,
@@ -46,7 +56,7 @@ module.exports = {
         phoneNumber,
       };
 
-      const result = await modelUser.updateProfile(setData, user.id);
+      const result = await modelUser.updateProfile(setData, id);
 
       return helperWrapper.response(res, 200, `Success update profile`, result);
     } catch (error) {
@@ -61,17 +71,27 @@ module.exports = {
 
   updateImage: async (req, res) => {
     try {
-      const user = req.decodeToken;
+      const { id } = req.decodeToken;
 
-      if (user.image) {
-        deleteFile(`public/uploads/user/${user.image}`);
+      const user = await modelUser.getUserById(id);
+      if (user.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Get data user by id ${id} not found`,
+          null
+        );
+      }
+
+      if (user[0].image) {
+        deleteFile(`public/uploads/user/${user[0].image}`);
       }
 
       const setData = {
         image: req.file.filename,
       };
 
-      const result = await modelUser.updateProfile(setData, user.id);
+      const result = await modelUser.updateProfile(setData, id);
       return helperWrapper.response(
         res,
         200,
@@ -90,8 +110,18 @@ module.exports = {
 
   updatePassword: async (req, res) => {
     try {
-      const user = req.decodeToken;
+      const { id } = req.decodeToken;
       const { newPassword, confirmPassword } = req.body;
+
+      const user = await modelUser.getUserById(id);
+      if (user.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Get data user by id ${id} not found`,
+          null
+        );
+      }
 
       if (newPassword !== confirmPassword) {
         return helperWrapper.response(
@@ -107,7 +137,7 @@ module.exports = {
 
       const setData = { password: passwordHash };
 
-      const result = await modelUser.updateProfile(setData, user.id);
+      const result = await modelUser.updateProfile(setData, id);
 
       return helperWrapper.response(res, 200, `Success update password`, {
         id: result.id,
