@@ -5,10 +5,23 @@ const helperWrapper = require("../../helper/wrapper");
 module.exports = {
   dashboard: async (req, res) => {
     try {
-      const { movieId, location, premiere } = req.query;
+      let { movieId, premiere, location } = req.query;
+      movieId = movieId || "";
+      premiere = premiere || "";
+      location = location || "";
 
-      const result = await bookingModel.dashboard(movieId, location, premiere);
-      return helperWrapper.response(res, 200, "Success get data", result);
+      const result = await bookingModel.dashboard(movieId, premiere, location);
+
+      if (result.length < 1) {
+        return helperWrapper.response(res, 404, "Data not found", null);
+      }
+
+      return helperWrapper.response(
+        res,
+        200,
+        "Success get data dashboard",
+        result
+      );
     } catch (error) {
       return helperWrapper.response(
         res,

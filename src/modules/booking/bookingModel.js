@@ -1,15 +1,18 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  dashboard: () =>
+  dashboard: (movieId, premiere, location) =>
     new Promise((resolve, reject) => {
-      connection.query("", (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(new Error(`SQL : ${err.sqlMessage}`));
+      connection.query(
+        `SELECT MONTH(b.createdAt) AS month, SUM(b.totalPayment) AS total FROM booking AS b JOIN schedule AS s ON b.movieId = s.movieId WHERE YEAR(b.createdAt) = YEAR(NOW()) AND b.movieId LIKE '%${movieId}%' AND s.premiere LIKE '%${premiere}%' AND s.location LIKE '%${location}%' GROUP BY MONTH(b.createdAt)`,
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(new Error(`SQL : ${err.sqlMessage}`));
+          }
         }
-      });
+      );
     }),
 
   usedTicket: (data, id) =>
