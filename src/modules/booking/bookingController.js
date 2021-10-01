@@ -3,13 +3,64 @@ const scheduleModel = require("../schedule/scheduleModel");
 const helperWrapper = require("../../helper/wrapper");
 
 module.exports = {
+  dashboard: async (req, res) => {
+    try {
+      const { movieId, location, premiere } = req.query;
+
+      const result = await bookingModel.dashboard(movieId, location, premiere);
+      return helperWrapper.response(res, 200, "Success get data", result);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  usedTicket: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const checkBooking = await bookingModel.getBookingById(id);
+
+      if (checkBooking.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by id ${id} not found !`,
+          null
+        );
+      }
+
+      if (checkBooking[0].statusUsed !== "Active") {
+        return helperWrapper.response(res, 400, "Ticket already used", null);
+      }
+
+      await bookingModel.usedTicket("notActive", id);
+      return helperWrapper.response(res, 200, "Success use ticket");
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
   getBookingById: async (req, res) => {
     try {
       const { id } = req.params;
 
       const result = await bookingModel.getBookingById(id);
       if (result.length < 1) {
-        return helperWrapper.response(res, 404, `Data by id not found !`, null);
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by id ${id} not found !`,
+          null
+        );
       }
 
       const newResult = [{ ...result[0], seat: [] }];
