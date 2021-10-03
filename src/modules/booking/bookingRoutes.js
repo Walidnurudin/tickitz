@@ -12,6 +12,7 @@ Router.get(
   middlewareAuth.isAdmin,
   bookingController.usedTicket
 );
+
 Router.get("/:id", bookingController.getBookingById);
 Router.get("/user-id/:id", bookingController.getBookingByUserId);
 Router.post("/", bookingController.postBooking);

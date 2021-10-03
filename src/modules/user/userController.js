@@ -56,6 +56,12 @@ module.exports = {
         phoneNumber,
       };
 
+      Object.keys(setData).forEach((property) => {
+        if (!setData[property]) {
+          delete setData[property];
+        }
+      });
+
       const result = await modelUser.updateProfile(setData, id);
 
       return helperWrapper.response(res, 200, `Success update profile`, result);
