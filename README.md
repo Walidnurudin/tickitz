@@ -1,9 +1,6 @@
-  <h3 align="center">TICKITZ</h3>
+# TICKITZ
 
-  <p align="center">
-    online movie ticket booking app
-  </p>
-</p>
+online movie ticket booking app
 
 <!-- NAVIGATION -->
 <ol>
@@ -27,12 +24,15 @@
 
 ## About The Project
 
+This application is a web-based online movie booking application for the backend / API.
+
 ### Built With
 
 some technology used in this project.
 
 - [Express](https://expressjs.com)
 - [JWT](https://jwt.io)
+- [MySQL](https://mysql.com)
 - [Redis](https://redis.io)
 - [Nodemailer](https://nodemailer.com)
 
@@ -40,33 +40,57 @@ some technology used in this project.
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
+Get started with this project, intructions on setting up your project locally.
+
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Before installing, you must be install [nodejs and npm.](https://nodejs.org)
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
-   ```
+1. Clone this repo
+
+```sh
+git clone https://github.com/Walidnurudin/tickitz
+```
+
+2. Install NPM package
+
+```sh
+cd tickitz
+npm install
+```
+
+3. Setting `.env`
+
+- create `.env` file
+
+  ```sh
+  touch .env
+  ```
+
+- Add configuration in `.env` file
+
+  ```
+  PORT=yourport
+
+  DB_HOST=yourhostname
+  DB_USER=yourusername
+  DB_PASSWORD=yourpassword
+  DB_DATABASE=yourdatabasename
+
+  EMAIL_USER=youremailuser
+  EMAIL_PASSWORD=youremailpassword
+
+  ```
+
+4. Start the server
+
+```sh
+npm run dev
+```
 
 <!-- CONTACT -->
 
