@@ -16,11 +16,20 @@ module.exports = {
         return helperWrapper.response(res, 404, "Data not found", null);
       }
 
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          month: item.month.slice(0, 3),
+        };
+
+        return data;
+      });
+
       return helperWrapper.response(
         res,
         200,
         "Success get data dashboard",
-        result
+        newResult
       );
     } catch (error) {
       return helperWrapper.response(
