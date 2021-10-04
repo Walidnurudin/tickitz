@@ -41,8 +41,7 @@ some technology used in this project.
 ## Getting Started
 
 Get started with this project, intructions on setting up your project locally.
-
-To get a local copy up and running follow these simple example steps.
+To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
