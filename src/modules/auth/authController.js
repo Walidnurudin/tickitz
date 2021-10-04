@@ -5,6 +5,7 @@ const transporter = require("../../config/nodemailer");
 const helperWrapper = require("../../helper/wrapper");
 const modelAuth = require("./authModel");
 const redis = require("../../config/redis");
+require("dotenv").config();
 
 module.exports = {
   register: async (req, res) => {
@@ -84,7 +85,7 @@ module.exports = {
       // MEMBUAT TOKEN MENGGUNAKAN JWT (data yang mau diubah, key/kata kunci, expaired/lama token bisa digunakan)
       const payload = checkUser[0];
       delete payload.password;
-      const token = jwt.sign({ ...payload }, "RAHASIA", {
+      const token = jwt.sign({ ...payload }, process.env.SECRET_KEY, {
         expiresIn: "24h",
       });
 

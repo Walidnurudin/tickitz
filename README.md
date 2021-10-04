@@ -84,6 +84,8 @@ npm install
   EMAIL_USER=youremailuser
   EMAIL_PASSWORD=youremailpassword
 
+  SECRET_KEY=yoursecretkey
+
   ```
 
 4. Start the server

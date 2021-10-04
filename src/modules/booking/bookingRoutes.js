@@ -5,7 +5,12 @@ const Router = express.Router();
 const bookingController = require("./bookingController");
 const middlewareAuth = require("../../middleware/auth");
 
-Router.get("/dashboard", bookingController.dashboard);
+Router.get(
+  "/dashboard",
+  // middlewareAuth.authentication,
+  // middlewareAuth.isAdmin,
+  bookingController.dashboard
+);
 Router.get(
   "/used-ticket/:id",
   middlewareAuth.authentication,

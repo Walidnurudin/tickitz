@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const helperWrapper = require("../helper/wrapper");
 const redis = require("../config/redis");
+require("dotenv").config();
 
 module.exports = {
   authentication: (req, res, next) => {
@@ -20,7 +21,7 @@ module.exports = {
       }
     });
 
-    jwt.verify(token, "RAHASIA", (err, result) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, result) => {
       if (err) {
         return helperWrapper.response(res, 403, err.message);
       }
