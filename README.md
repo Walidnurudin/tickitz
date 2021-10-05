@@ -80,6 +80,11 @@ npm install
   DB_PASSWORD=yourpassword
   DB_DATABASE=yourdatabasename
 
+  REDIS_HOST=yourredishost
+  REDIS_PORT=tourredisport
+  REDIS_PASSWORD=yourredispassword
+
+
   EMAIL_USER=youremailuser
   EMAIL_PASSWORD=youremailpassword
 

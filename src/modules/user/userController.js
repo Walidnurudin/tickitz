@@ -94,7 +94,7 @@ module.exports = {
       }
 
       const setData = {
-        image: req.file.filename,
+        image: req.file ? req.file.filename : null,
       };
 
       const result = await modelUser.updateProfile(setData, id);
