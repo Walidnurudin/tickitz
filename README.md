@@ -74,29 +74,29 @@ npm install
 
   ```
   PORT=yourport
-
-  DB_HOST=yourhostname
-  DB_USER=yourusername
-  DB_PASSWORD=yourpassword
-  DB_DATABASE=yourdatabasename
-
-  REDIS_HOST=yourredishost
-  REDIS_PORT=tourredisport
-  REDIS_PASSWORD=yourredispassword
-
-
-  EMAIL_USER=youremailuser
-  EMAIL_PASSWORD=youremailpassword
-
-  SECRET_KEY=yoursecretkey
-
   ```
+
+DB_HOST=yourdbhostname
+DB_USER=yourdbusername
+DB_PASSWORD=yourdbpassword
+DB_DATABASE=yourdbdatabasename
+
+REDIS_HOST=yourredishost
+REDIS_PORT=tourredisport
+REDIS_PASSWORD=yourredispassword
+
+EMAIL_USER=youremailuser
+EMAIL_PASSWORD=youremailpassword
+
+SECRET_KEY=yoursecretkey
+
+````
 
 4. Start the server
 
 ```sh
 npm run dev
-```
+````
 
 <!-- CONTACT -->
 
