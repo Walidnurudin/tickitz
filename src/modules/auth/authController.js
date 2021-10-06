@@ -91,13 +91,20 @@ module.exports = {
       // MEMBUAT TOKEN MENGGUNAKAN JWT (data yang mau diubah, key/kata kunci, expaired/lama token bisa digunakan)
       const payload = checkUser[0];
       delete payload.password;
+
       const token = jwt.sign({ ...payload }, process.env.SECRET_KEY, {
         expiresIn: "24h",
+      });
+
+      // Add refresh token
+      const refreshToken = jwt.sign({ ...payload }, process.env.SECRET_KEY, {
+        expiresIn: "72h",
       });
 
       return helperWrapper.response(res, 200, "Success login", {
         id: payload.id,
         token,
+        refreshToken,
       });
     } catch (error) {
       return helperWrapper.response(
@@ -136,6 +143,55 @@ module.exports = {
         res,
         400,
         `Bad Request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  refreshToken: async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+
+      // PROSES PENGECEKAN REFRESH TOKEN APAKAH BISA DIGUNAKAN ATAU TIDAK
+      redis.get(`refreshToken:${refreshToken}`, (err, result) => {
+        if (!err && result !== null) {
+          return helperWrapper.response(
+            res,
+            403,
+            "Your refresh token cannot be use"
+          );
+        }
+
+        jwt.verify(refreshToken, process.env.SECRET_KEY, (err, result) => {
+          if (err) {
+            return helperWrapper.response(res, 403, err.message);
+          }
+
+          delete result.iat;
+          delete result.exp;
+
+          const token = jwt.sign(result, process.env.SECRET_KEY, {
+            expiresIn: "24h",
+          });
+
+          const newRefreshToken = jwt.sign(result, process.env.SECRET_KEY, {
+            expiresIn: "72h",
+          });
+
+          redis.setex(`refreshToken:${refreshToken}`, 3600 * 72, refreshToken);
+
+          return helperWrapper.response(res, 200, "Success Refresh Token !", {
+            id: result.id,
+            token,
+            refreshToken: newRefreshToken,
+          });
+        });
+      });
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
         null
       );
     }
