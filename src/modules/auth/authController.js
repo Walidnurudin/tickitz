@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const transporter = require("../../config/nodemailer");
+const sendMail = require("../../helper/email");
 const helperWrapper = require("../../helper/wrapper");
 const modelAuth = require("./authModel");
 const redis = require("../../config/redis");
@@ -33,17 +33,23 @@ module.exports = {
 
       const result = await modelAuth.register(setData);
 
-      const mailOptions = {
-        from: "walidnurudin47@gmail.com",
+      const sendDataEmail = {
         to: result.email,
-        subject: "Tickitz application",
-        html: `<h1>Activate email <a href='http://localhost:3001/auth/activate/${result.id}'>here</a></h1>`,
+        subject: "Email Verification !",
+        template: "email-verification",
+        data: {
+          firstName: result.firstName,
+          id: result.id,
+        },
+        // attachment: [
+        //   {
+        //     filename: "movie1.jpg",
+        //     path: "./public/uploads/movie/2021-09-29T06-59-56.645ZAstronaut.jpeg",
+        //   },
+        // ],
       };
 
-      transporter.sendMail(mailOptions, (err) => {
-        if (err) throw err;
-        // console.log(`Email sent: ${info.response}`);
-      });
+      await sendMail(sendDataEmail);
 
       return helperWrapper.response(res, 200, `Success register user`, result);
     } catch (error) {
