@@ -1,12 +1,13 @@
 const ejs = require("ejs");
 const path = require("path");
 const pdf = require("html-pdf");
+const { v4: uuidv4 } = require("uuid");
 
 const bookingModel = require("./bookingModel");
 const scheduleModel = require("../schedule/scheduleModel");
 
 const helperWrapper = require("../../helper/wrapper");
-// const midtrans = require("../../helper/midtrans");
+const midtrans = require("../../helper/midtrans");
 
 module.exports = {
   dashboard: async (req, res) => {
@@ -183,6 +184,7 @@ module.exports = {
 
       // [1]
       const setDataBooking = {
+        id: uuidv4(),
         userId: id,
         scheduleId,
         movieId: schedule[0].movieId,
@@ -213,7 +215,10 @@ module.exports = {
       });
 
       // [3] midtrans proses
-      // midtrans.post();
+      const resultMidtrans = await midtrans.post(
+        setDataBooking.id,
+        setDataBooking.totalPayment
+      );
 
       const result = {
         userId: id,
@@ -226,7 +231,10 @@ module.exports = {
         seat,
       };
 
-      return helperWrapper.response(res, 200, "Success create data", result);
+      return helperWrapper.response(res, 200, "Success create data", {
+        ...result,
+        urlRedirect: resultMidtrans,
+      });
     } catch (error) {
       return helperWrapper.response(
         res,

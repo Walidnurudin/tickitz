@@ -90,6 +90,10 @@ EMAIL_PASSWORD=youremailpassword
 
 SECRET_KEY=yoursecretkey
 
+MIDTRANS_IS_PRODUCTION=yourmidtransisproduction
+MIDTRANS_CLIENT_KEY=yourmidtransclientkey
+MIDTRANS_SERVER_KEY=yourmidtransserverkey
+
 ````
 
 4. Start the server
