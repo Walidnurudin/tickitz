@@ -54,6 +54,7 @@ module.exports = {
         lastName,
         email,
         phoneNumber,
+        updatedAt: new Date(Date()),
       };
 
       Object.keys(setData).forEach((property) => {
@@ -95,6 +96,7 @@ module.exports = {
 
       const setData = {
         image: req.file ? req.file.filename : null,
+        updatedAt: new Date(Date()),
       };
 
       const result = await modelUser.updateProfile(setData, id);

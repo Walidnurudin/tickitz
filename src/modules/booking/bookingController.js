@@ -1,6 +1,12 @@
+const ejs = require("ejs");
+const path = require("path");
+const pdf = require("html-pdf");
+
 const bookingModel = require("./bookingModel");
 const scheduleModel = require("../schedule/scheduleModel");
+
 const helperWrapper = require("../../helper/wrapper");
+// const midtrans = require("../../helper/midtrans");
 
 module.exports = {
   dashboard: async (req, res) => {
@@ -109,7 +115,7 @@ module.exports = {
 
   getBookingByUserId: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.decodeToken;
 
       const booking = await bookingModel.getBookingByUserId(id);
 
@@ -153,7 +159,7 @@ module.exports = {
   postBooking: async (req, res) => {
     try {
       const {
-        userId,
+        // userId,
         scheduleId,
         // movieId,
         dateBooking,
@@ -162,6 +168,8 @@ module.exports = {
         statusPayment,
         seat,
       } = req.body;
+
+      const { id } = req.decodeToken;
 
       const schedule = await scheduleModel.getScheduleById(scheduleId);
       if (schedule < 1) {
@@ -175,7 +183,7 @@ module.exports = {
 
       // [1]
       const setDataBooking = {
-        userId,
+        userId: id,
         scheduleId,
         movieId: schedule[0].movieId,
         totalTicket: seat.length,
@@ -204,8 +212,11 @@ module.exports = {
         });
       });
 
+      // [3] midtrans proses
+      // midtrans.post();
+
       const result = {
-        userId,
+        userId: id,
         scheduleId,
         movieId: schedule[0].movieId,
         dateBooking,
@@ -216,6 +227,74 @@ module.exports = {
       };
 
       return helperWrapper.response(res, 200, "Success create data", result);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  exportTicket: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const fileName = `ticket-${id}.pdf`;
+
+      // CHECK BOOKING
+      const booking = await bookingModel.getBookingById(id);
+      if (booking.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Data by id ${id} not found !`,
+          null
+        );
+      }
+
+      const newBooking = [{ ...booking[0], seat: [] }];
+
+      booking.forEach((item) => {
+        newBooking[0].seat.push(item.seat);
+      });
+
+      // PROSES EXPORT HTML to PDF
+      ejs.renderFile(
+        path.resolve("./src/templates/pdf/ticket.ejs"),
+        { newBooking },
+        (err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            const options = {
+              height: "11.25in",
+              width: "8.5in",
+              header: {
+                height: "20mm",
+              },
+              footer: {
+                height: "20mm",
+              },
+            };
+
+            pdf
+              .create(result, options)
+              .toFile(path.resolve(`./public/generate/${fileName}`), (err) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  return helperWrapper.response(
+                    res,
+                    200,
+                    "Success export ticket",
+                    { url: `http://localhost:3001/generate/${fileName}` }
+                  );
+                }
+              });
+          }
+        }
+      );
     } catch (error) {
       return helperWrapper.response(
         res,

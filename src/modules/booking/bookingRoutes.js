@@ -7,8 +7,8 @@ const middlewareAuth = require("../../middleware/auth");
 
 Router.get(
   "/dashboard",
-  // middlewareAuth.authentication,
-  // middlewareAuth.isAdmin,
+  middlewareAuth.authentication,
+  middlewareAuth.isAdmin,
   bookingController.dashboard
 );
 Router.get(
@@ -18,8 +18,19 @@ Router.get(
   bookingController.usedTicket
 );
 
+Router.get(
+  "/user-id",
+  middlewareAuth.authentication,
+  bookingController.getBookingByUserId
+);
+
 Router.get("/:id", bookingController.getBookingById);
-Router.get("/user-id/:id", bookingController.getBookingByUserId);
-Router.post("/", bookingController.postBooking);
+
+Router.post("/", middlewareAuth.authentication, bookingController.postBooking);
+Router.get(
+  "/ticket/:id",
+  middlewareAuth.authentication,
+  bookingController.exportTicket
+);
 
 module.exports = Router;
