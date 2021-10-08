@@ -24,7 +24,11 @@ Router.get(
   bookingController.getBookingByUserId
 );
 
-Router.get("/:id", bookingController.getBookingById);
+Router.get(
+  "/:id",
+  middlewareAuth.authentication,
+  bookingController.getBookingById
+);
 
 Router.post("/", middlewareAuth.authentication, bookingController.postBooking);
 Router.get(
@@ -32,5 +36,6 @@ Router.get(
   middlewareAuth.authentication,
   bookingController.exportTicket
 );
+Router.post("/midtrans-notification", bookingController.postMidtransNotif);
 
 module.exports = Router;

@@ -5,9 +5,34 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+  body {
+    text-align: center;
+  }
+
+  img {
+    margin-bottom: 50px;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+    font-size: larger;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: blueviolet;
+    border-radius: 5px;
+    border-style: none;
+  }
+
+  </style>
 </head>
 <body>
+  <img src="/public/Tickitz.png" alt="logo">
   <h3>Hai, {{firstName}}</h3>
-  <h1>Activate email <a href='https://tickitz-backend.herokuapp.com/auth/activate/{{id}}'>here</a></h1>
+  <h1>Verify your email to finish signing up.</h1>
+  <button><a href='https://tickitz-backend.herokuapp.com/auth/activate/{{id}}'>Activate email</a></button>
 </body>
 </html>

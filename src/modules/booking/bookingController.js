@@ -166,7 +166,7 @@ module.exports = {
         dateBooking,
         timeBooking,
         paymentMethod,
-        statusPayment,
+        // statusPayment,
         seat,
       } = req.body;
 
@@ -193,7 +193,7 @@ module.exports = {
         dateBooking,
         timeBooking,
         paymentMethod,
-        statusPayment,
+        statusPayment: "pending",
       };
 
       const resultBooking = await bookingModel.postBooking(setDataBooking);
@@ -227,14 +227,83 @@ module.exports = {
         dateBooking,
         timeBooking,
         paymentMethod,
-        statusPayment,
+        statusPayment: setDataBooking.statusPayment,
         seat,
       };
+
+      await bookingModel.updateBooking(
+        { payment: resultMidtrans },
+        setDataBooking.id
+      );
 
       return helperWrapper.response(res, 200, "Success create data", {
         ...result,
         urlRedirect: resultMidtrans,
       });
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  postMidtransNotif: async (req, res) => {
+    try {
+      console.log(req.body);
+      const result = await midtrans.notif(req.body);
+      const {
+        order_id: bookingId,
+        transaction_status: transactionStatus,
+        fraud_status: fraudStatus,
+      } = result;
+
+      if (transactionStatus === "capture") {
+        // capture only applies to card transaction, which you need to check for the fraudStatus
+        if (fraudStatus === "challenge") {
+          // TODO set transaction status on your databaase to 'challenge'
+        } else if (fraudStatus === "accept") {
+          // TODO set transaction status on your databaase to 'success'
+          // [1]
+          const setData = {
+            statusPayment: "success",
+            statusUsed: "Active",
+            updatedAt: new Date(Date()),
+          };
+          // MENJALANKAN MODEL UNTUK MENGUBAH STATUS BOOKING MENJADI SUKSES
+          await bookingModel.updateBooking(setData, bookingId);
+        }
+      } else if (transactionStatus === "settlement") {
+        // TODO set transaction status on your databaase to 'success'
+        // [1]
+        const setData = {
+          statusPayment: "success",
+          statusUsed: "Active",
+          updatedAt: new Date(Date()),
+        };
+        // MENJALANKAN MODEL UNTUK MENGUBAH STATUS BOOKING MENJADI SUKSES
+        await bookingModel.updateBooking(setData, bookingId);
+      } else if (transactionStatus === "deny") {
+        // TODO you can ignore 'deny', because most of the time it allows payment retries
+        // and later can become success
+      } else if (
+        transactionStatus === "cancel" ||
+        transactionStatus === "expire"
+      ) {
+        // TODO set transaction status on your databaase to 'failure'
+        // [1]
+        const setData = {
+          statusPayment: "failed",
+          statusUsed: "notActive",
+          updatedAt: new Date(Date()),
+        };
+        // MENJALANKAN MODEL UNTUK MENGUBAH STATUS BOOKING MENJADI GAGAL
+        await bookingModel.updateBooking(setData, bookingId);
+      } else if (transactionStatus === "pending") {
+        // TODO set transaction status on your databaase to 'pending' / waiting payment
+      }
     } catch (error) {
       return helperWrapper.response(
         res,

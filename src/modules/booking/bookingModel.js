@@ -81,4 +81,19 @@ module.exports = {
         }
       });
     }),
+
+  updateBooking: (data, id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE booking SET ? WHERE id = ?",
+        [data, id],
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(new Error(`SQL : ${err.sqlMessage}`));
+          }
+        }
+      );
+    }),
 };
