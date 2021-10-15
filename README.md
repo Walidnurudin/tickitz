@@ -72,9 +72,8 @@ npm install
 
 - Add configuration in `.env` file
 
-  ```
-  PORT=yourport
-  ```
+```
+PORT=yourport
 
 DB_HOST=yourdbhostname
 DB_USER=yourdbusername
@@ -94,13 +93,13 @@ MIDTRANS_IS_PRODUCTION=yourmidtransisproduction
 MIDTRANS_SERVER_KEY=yourmidtransserverkey
 MIDTRANS_CLIENT_KEY=yourmidtransclientkey
 
-````
+```
 
 4. Start the server
 
 ```sh
 npm run dev
-````
+```
 
 <!-- CONTACT -->
 
