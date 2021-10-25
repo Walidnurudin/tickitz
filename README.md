@@ -1,6 +1,6 @@
-# TICKITZ
+# TICKITZ API
 
-online movie ticket booking app
+online movie ticket booking API
 
 <!-- NAVIGATION -->
 <ol>

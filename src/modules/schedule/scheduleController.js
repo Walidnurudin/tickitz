@@ -41,11 +41,17 @@ module.exports = {
       );
 
       const newResult = result.map((item) => {
+        if (item.time.length > 1) {
+          const data = {
+            ...item,
+            time: item.time.split(","),
+          };
+          return data;
+        }
         const data = {
           ...item,
-          time: item.time.split(","),
+          time: [item.time],
         };
-
         return data;
       });
 
