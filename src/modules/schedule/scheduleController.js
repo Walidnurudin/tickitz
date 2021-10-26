@@ -6,12 +6,22 @@ const redis = require("../../config/redis");
 module.exports = {
   getAllSchedule: async (req, res) => {
     try {
-      let { page, limit, searchLocation, searchMovieId, sort } = req.query;
+      let {
+        page,
+        limit,
+        searchLocation,
+        searchMovieId,
+        dateStart,
+        dateEnd,
+        sort,
+      } = req.query;
       page = Number(page) || 1;
       limit = Number(limit) || 10;
       searchLocation = searchLocation || "";
       searchMovieId = searchMovieId || "";
       sort = sort || "price ASC";
+      dateStart = dateStart || new Date().toISOString().split("T")[0];
+      dateEnd = dateEnd || "";
 
       let offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule(
@@ -37,6 +47,8 @@ module.exports = {
         offset,
         searchLocation,
         searchMovieId,
+        dateStart,
+        dateEnd,
         sort
       );
 

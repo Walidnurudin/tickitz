@@ -6,11 +6,12 @@ const deleteFile = require("../../helper/uploads/deleteFile");
 module.exports = {
   getAllMovie: async (req, res) => {
     try {
-      let { page, limit, search, sort } = req.query;
+      let { page, limit, search, month, sort } = req.query;
       page = Number(page) || 1;
       limit = Number(limit) || 10;
       sort = sort || "name ASC";
       search = search || "";
+      month = month || "";
 
       let offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie(search);
@@ -28,7 +29,13 @@ module.exports = {
         totalData,
       };
 
-      const result = await movieModel.getAllMovie(limit, offset, search, sort);
+      const result = await movieModel.getAllMovie(
+        limit,
+        offset,
+        search,
+        month,
+        sort
+      );
 
       if (result.length < 1) {
         return helperWrapper.response(res, 404, `Data not found !`, null);
