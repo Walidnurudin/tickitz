@@ -196,11 +196,11 @@ module.exports = {
         statusPayment: "pending",
       };
 
-      const resultBooking = await bookingModel.postBooking(setDataBooking);
+      await bookingModel.postBooking(setDataBooking);
 
       // [2]
       const setDataSeatBooking = {
-        bookingId: resultBooking.insertId,
+        bookingId: setDataBooking.id,
         scheduleId,
         movieId: schedule[0].movieId,
         dateBooking,
@@ -221,6 +221,7 @@ module.exports = {
       );
 
       const result = {
+        id: setDataBooking.id,
         userId: id,
         scheduleId,
         movieId: schedule[0].movieId,
@@ -304,6 +305,7 @@ module.exports = {
       } else if (transactionStatus === "pending") {
         // TODO set transaction status on your databaase to 'pending' / waiting payment
       }
+      return helperWrapper.response(res, 200, "Success", null);
     } catch (error) {
       return helperWrapper.response(
         res,

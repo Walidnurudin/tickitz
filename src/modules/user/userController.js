@@ -39,6 +39,15 @@ module.exports = {
       const { id } = req.decodeToken;
       const { firstName, lastName, email, phoneNumber } = req.body;
 
+      if (!firstName || !lastName || !email || !phoneNumber) {
+        return helperWrapper.response(
+          res,
+          400,
+          `Please complete all fields`,
+          null
+        );
+      }
+
       const user = await modelUser.getUserById(id);
       if (user.length < 1) {
         return helperWrapper.response(
@@ -120,6 +129,15 @@ module.exports = {
     try {
       const { id } = req.decodeToken;
       const { newPassword, confirmPassword } = req.body;
+
+      if (!newPassword || !confirmPassword) {
+        return helperWrapper.response(
+          res,
+          400,
+          `Please complete all fields`,
+          null
+        );
+      }
 
       const user = await modelUser.getUserById(id);
       if (user.length < 1) {

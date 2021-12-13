@@ -11,6 +11,15 @@ module.exports = {
   register: async (req, res) => {
     try {
       const { firstName, lastName, email, role, password } = req.body;
+      if (!firstName || !lastName || !email || !password) {
+        return helperWrapper.response(
+          res,
+          400,
+          `Please complete all fields`,
+          null
+        );
+      }
+
       // PROSES PENGECEKAN EMAIL SUDAH PERNAH TERDAFTAR ATAU BELUM DI DATABASE
       const checkUser = await modelAuth.getUserByEmail(email);
 
@@ -51,7 +60,12 @@ module.exports = {
 
       await sendMail(sendDataEmail);
 
-      return helperWrapper.response(res, 200, `Success register user`, result);
+      return helperWrapper.response(
+        res,
+        200,
+        `Success register, please check email to verification!`,
+        result
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -65,6 +79,14 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
+      if (!email || !password) {
+        return helperWrapper.response(
+          res,
+          400,
+          `Please complete all fields`,
+          null
+        );
+      }
       const checkUser = await modelAuth.getUserByEmail(email);
 
       if (checkUser.length < 1) {
