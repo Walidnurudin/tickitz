@@ -19,5 +19,10 @@ Router.patch(
   middlewareAuth.authentication,
   userController.updatePassword
 );
+Router.get(
+  "/ticket-history",
+  middlewareAuth.authentication,
+  userController.getTicketHistory
+);
 
 module.exports = Router;

@@ -177,4 +177,61 @@ module.exports = {
       );
     }
   },
+
+  getTicketHistory: async (req, res) => {
+    try {
+      const { id } = req.decodeToken;
+
+      const user = await modelUser.getUserById(id);
+      if (user.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Get data user by id ${id} not found`,
+          null
+        );
+      }
+
+      const result = await modelUser.ticketHistory(id);
+      if (!result) {
+        return helperWrapper.response(
+          res,
+          404,
+          `Ticket history by id ${id} not found`,
+          null
+        );
+      }
+
+      const newResult = [];
+      result.forEach((item) => {
+        const existing = newResult.filter(
+          (item2) => item2.scheduleId === item.scheduleId
+        );
+        if (existing.length) {
+          const existingIndex = newResult.indexOf(existing[0]);
+          newResult[existingIndex].seat = newResult[existingIndex].seat.concat(
+            item.seat
+          );
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          if (typeof item.seat === "string") item.seat = [item.seat];
+          newResult.push(item);
+        }
+      });
+
+      return helperWrapper.response(
+        res,
+        200,
+        `Success get ticket history`,
+        newResult
+      );
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
 };

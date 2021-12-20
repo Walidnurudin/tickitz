@@ -359,18 +359,21 @@ module.exports = {
 
             pdf
               .create(result, options)
-              .toFile(path.resolve(`./public/generate/${fileName}`), (err) => {
-                if (err) {
-                  console.log(err);
-                } else {
-                  return helperWrapper.response(
-                    res,
-                    200,
-                    "Success export ticket",
-                    { url: `http://localhost:3001/generate/${fileName}` }
-                  );
+              .toFile(
+                path.resolve(`./public/generate/${fileName}`),
+                (errPdf) => {
+                  if (errPdf) {
+                    console.log(errPdf);
+                  } else {
+                    return helperWrapper.response(
+                      res,
+                      200,
+                      "Success export ticket",
+                      { url: `http://localhost:3001/generate/${fileName}` }
+                    );
+                  }
                 }
-              });
+              );
           }
         }
       );
