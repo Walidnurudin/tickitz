@@ -68,7 +68,13 @@ module.exports = {
       });
 
       if (result.length < 1) {
-        return helperWrapper.response(res, 200, `Data not found !`, []);
+        return helperWrapper.response(
+          res,
+          200,
+          `Data not found !`,
+          [],
+          pageInfo
+        );
       }
 
       redis.setex(

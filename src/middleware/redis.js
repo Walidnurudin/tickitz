@@ -59,7 +59,6 @@ module.exports = {
       if (!err && result !== null) {
         console.log("Data ada didalam redis");
         const newResult = JSON.parse(result);
-        console.log("Redis all", newResult.result);
 
         // convert time "string" to "array"
         const newResult2 = newResult.result.map((item) => {
@@ -69,7 +68,6 @@ module.exports = {
               time: item.time.split(","),
             };
 
-            console.log(data);
             return data;
           }
           const data = {
@@ -98,7 +96,6 @@ module.exports = {
       if (!err && result !== null) {
         console.log("Data ada didalam redis");
         const newResult = JSON.parse(result);
-        console.log("Redis by id", newResult);
         return helperWrapper.response(res, 200, "Success get data", newResult);
       }
       console.log("Data tidak ada didalam redis");
@@ -112,7 +109,6 @@ module.exports = {
       if (!err && result !== null) {
         console.log("Data ada didalam redis");
         const newResult = JSON.parse(result);
-        console.log("Redis by movie id", newResult);
         return helperWrapper.response(res, 200, "Success get data", newResult);
       }
       console.log("Data tidak ada didalam redis");

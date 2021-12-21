@@ -20,7 +20,7 @@ module.exports = {
       const result = await bookingModel.dashboard(movieId, premiere, location);
 
       if (result.length < 1) {
-        return helperWrapper.response(res, 404, "Data not found", null);
+        return helperWrapper.response(res, 200, "Data not found", []);
       }
 
       const newResult = result.map((item) => {
@@ -253,7 +253,6 @@ module.exports = {
 
   postMidtransNotif: async (req, res) => {
     try {
-      console.log(req.body);
       const result = await midtrans.notif(req.body);
       const {
         order_id: bookingId,

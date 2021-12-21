@@ -1,11 +1,11 @@
 const midtransClient = require("midtrans-client");
 require("dotenv").config();
 
-console.log({
-  isProduction: process.env.MIDT_IS_PRODUCTION === "true",
-  serverKey: process.env.MIDTRANS_SERVER_KEY,
-  clientKey: process.env.MIDTRANS_CLIENT_KEY,
-});
+// console.log({
+//   isProduction: process.env.MIDT_IS_PRODUCTION === "true",
+//   serverKey: process.env.MIDTRANS_SERVER_KEY,
+//   clientKey: process.env.MIDTRANS_CLIENT_KEY,
+// });
 
 const snap = new midtransClient.Snap({
   isProduction: process.env.MIDT_IS_PRODUCTION === "true",

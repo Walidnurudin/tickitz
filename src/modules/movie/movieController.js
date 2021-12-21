@@ -38,7 +38,13 @@ module.exports = {
       );
 
       if (result.length < 1) {
-        return helperWrapper.response(res, 200, `Data not found !`, []);
+        return helperWrapper.response(
+          res,
+          200,
+          `Data not found !`,
+          [],
+          pageInfo
+        );
       }
 
       redis.setex(
@@ -71,9 +77,9 @@ module.exports = {
       if (result.length < 1) {
         return helperWrapper.response(
           res,
-          200,
+          404,
           `Data by id ${id} not found !`,
-          []
+          null
         );
       }
 
@@ -113,8 +119,6 @@ module.exports = {
         synopsis,
         image: req.file ? req.file.filename : null,
       };
-
-      console.log(req.file);
 
       const result = await movieModel.postMovie(setData);
 
