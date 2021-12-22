@@ -331,7 +331,13 @@ module.exports = {
         );
       }
 
-      const newBooking = [{ ...booking[0], seat: [] }];
+      const newBooking = [
+        {
+          ...booking[0],
+          seat: [],
+          dateBooking: booking[0].dateBooking.toISOString().split("T")[0],
+        },
+      ];
 
       booking.forEach((item) => {
         newBooking[0].seat.push(item.seat);
@@ -343,7 +349,6 @@ module.exports = {
         { newBooking },
         (err, result) => {
           if (err) {
-            console.log(err);
           } else {
             const options = {
               height: "11.25in",
@@ -362,7 +367,6 @@ module.exports = {
                 path.resolve(`./public/generate/${fileName}`),
                 (errPdf) => {
                   if (errPdf) {
-                    console.log(errPdf);
                   } else {
                     return helperWrapper.response(
                       res,
