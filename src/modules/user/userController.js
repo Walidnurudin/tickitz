@@ -202,11 +202,11 @@ module.exports = {
         );
       }
 
+      console.log(result, "NEW RESULT");
+
       const newResult = [];
       result.forEach((item) => {
-        const existing = newResult.filter(
-          (item2) => item2.scheduleId === item.scheduleId
-        );
+        const existing = newResult.filter((item2) => item2.id === item.id);
         if (existing.length) {
           const existingIndex = newResult.indexOf(existing[0]);
           newResult[existingIndex].seat = newResult[existingIndex].seat.concat(
@@ -218,6 +218,8 @@ module.exports = {
           newResult.push(item);
         }
       });
+
+      console.log(newResult, "NEW RESULT");
 
       return helperWrapper.response(
         res,

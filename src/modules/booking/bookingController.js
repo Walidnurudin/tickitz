@@ -135,7 +135,6 @@ module.exports = {
 
       booking.forEach((item) => {
         const existing = output.filter((v) => v.scheduleId === item.scheduleId);
-
         if (existing.length) {
           const existingIndex = output.indexOf(existing[0]);
           output[existingIndex].seat = output[existingIndex].seat.concat(
