@@ -21,7 +21,13 @@ module.exports = {
       searchMovieId = searchMovieId || "";
       sort = sort || "price ASC";
       dateStart = dateStart || new Date().toISOString().split("T")[0];
-      dateEnd = dateEnd || "";
+
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const day = d.getDate();
+      const c = new Date(year + 1, month, day).toISOString().split("T")[0];
+      dateEnd = dateEnd || c;
 
       let offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule(

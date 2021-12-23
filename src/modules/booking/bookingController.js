@@ -9,6 +9,8 @@ const scheduleModel = require("../schedule/scheduleModel");
 const helperWrapper = require("../../helper/wrapper");
 const midtrans = require("../../helper/midtrans");
 
+require("dotenv").config();
+
 module.exports = {
   dashboard: async (req, res) => {
     try {
@@ -372,7 +374,7 @@ module.exports = {
                       res,
                       200,
                       "Success export ticket",
-                      { url: `http://localhost:3001/generate/${fileName}` }
+                      { url: `${process.env.URL_BACKEND}/generate/${fileName}` }
                     );
                   }
                 }
