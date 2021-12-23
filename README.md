@@ -74,6 +74,7 @@ npm install
 
 ```
 PORT=yourport
+URL_BACKEND=yoururlbackend
 
 DB_HOST=yourdbhostname
 DB_USER=yourdbusername
