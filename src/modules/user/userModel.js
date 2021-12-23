@@ -32,7 +32,8 @@ module.exports = {
   ticketHistory: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, b.statusUsed,  sb.seat, m.name, s.premiere FROM booking AS b JOIN seatBooking AS sb ON b.id = sb.bookingId JOIN movie AS m ON b.movieId = m.id JOIN schedule AS s ON b.scheduleId = s.id WHERE b.userId = "${id}"`,
+        `SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, b.statusUsed,  sb.seat, m.name, s.premiere FROM booking AS b JOIN seatBooking AS sb ON b.id = sb.bookingId JOIN movie AS m ON b.movieId = m.id JOIN schedule AS s ON b.scheduleId = s.id WHERE b.userId = ?`,
+        id,
         (err, result) => {
           if (!err) {
             resolve(result);
