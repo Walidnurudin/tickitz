@@ -11,17 +11,19 @@ module.exports = {
     sort
   ) =>
     new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM schedule WHERE location LIKE '%${searchLocation}%' AND movieId LIKE '%${searchMovieId}%' AND dateStart <= '${dateStart}' AND dateEnd >= '${dateEnd}' ORDER BY ${sort} LIMIT ? OFFSET ?`,
-        [limit, offset],
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else {
-            reject(new Error(`SQL : ${err.sqlMessage}`));
-          }
+      let url = "";
+      if (!dateStart || !dateEnd) {
+        url = `SELECT * FROM schedule WHERE location LIKE '%${searchLocation}%' AND movieId LIKE '%${searchMovieId}%' ORDER BY ${sort} LIMIT ? OFFSET ?`;
+      } else {
+        url = `SELECT * FROM schedule WHERE location LIKE '%${searchLocation}%' AND movieId LIKE '%${searchMovieId}%' AND dateStart <= '${dateStart}' AND dateEnd >= '${dateEnd}' ORDER BY ${sort} LIMIT ? OFFSET ?`;
+      }
+      connection.query(url, [limit, offset], (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(new Error(`SQL : ${err.sqlMessage}`));
         }
-      );
+      });
     }),
 
   getScheduleById: (id) =>
